@@ -16,6 +16,19 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Drive access controls
+
+Before deploying the file/folder lock and access-request feature, run
+[`supabase/migrations/20261116000000_drive_access_controls.sql`](./supabase/migrations/20261116000000_drive_access_controls.sql)
+in the Supabase SQL Editor. It creates the access-control and request tables,
+enables row-level security, restricts direct table access to the server role,
+and records existing file owners from `file_metadata`. Folders created before
+creator tracking was added can only be locked by an admin because their
+original creator is not recorded.
+
+Set `SUPABASE_SERVICE_ROLE_KEY` in the server environment for this feature.
+Keep this key server-only; never expose it with a `NEXT_PUBLIC_` prefix.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

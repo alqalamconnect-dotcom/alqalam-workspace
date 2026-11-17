@@ -1,26 +1,338 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #f5efe6;
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.dashboard-main {
+  min-width: 0;
+}
+
+.app-sidebar {
+  width: 256px;
+  height: 100vh;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 40;
+}
+
+.sidebar-link {
+  flex-shrink: 0;
+}
+
+.qalam-ai-card {
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4c5b5;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b8a898;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .dashboard-main {
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-sidebar {
+    position: sticky !important;
+    inset: 0 auto auto 0;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 60px;
+    flex: 0 0 100% !important;
+    flex-direction: row !important;
+    align-items: center;
+    align-self: flex-start;
+  }
+
+  .sidebar-brand {
+    flex-shrink: 0;
+    padding: 8px 10px !important;
+    border-bottom: 0 !important;
+  }
+
+  .sidebar-brand > div:last-child {
+    display: none;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    padding: 6px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  .sidebar-section-title,
+  .sidebar-separator {
+    display: none !important;
+  }
+
+  .sidebar-link {
+    padding: 9px 10px !important;
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+
+  .sidebar-link svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .sidebar-user {
+    flex-shrink: 0;
+    padding: 6px !important;
+    border-top: 0 !important;
+    border-left: 1px solid #2d2d2d;
+  }
+
+  .sidebar-user-info,
+  .sidebar-logout-label {
+    display: none;
+  }
+
+  .sidebar-logout {
+    width: auto !important;
+    padding: 10px !important;
+  }
+
+  .dashboard-main {
+    width: 100%;
+    margin-left: 0 !important;
+    padding: 20px !important;
+    flex: 0 0 100% !important;
+    align-self: flex-start;
+  }
+
+  .files-header {
+    align-items: flex-start !important;
+  }
+
+  .files-toolbar-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .files-breadcrumb {
+    max-width: 100%;
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .folder-entry-row {
+    flex-wrap: wrap;
+    padding: 12px 16px !important;
+  }
+
+  .folder-entry-row > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .file-entry-row {
+    flex-wrap: wrap;
+    gap: 10px !important;
+    padding: 12px 16px !important;
+  }
+
+  .file-entry-row > div:first-child {
+    width: 100%;
+  }
+
+  .file-entry-actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    opacity: 1 !important;
+  }
+
+  .file-entry-row > div:first-child > div:last-child > div {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-recent-row {
+    align-items: flex-start !important;
+    gap: 10px;
+    padding: 12px 16px !important;
+  }
+
+  .activity-row {
+    flex-wrap: wrap;
+    padding: 14px 16px !important;
+  }
+
+  .activity-row > div:last-child {
+    margin-left: auto;
+  }
+
+  .registration-tabs {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .registration-row {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px 16px !important;
+  }
+
+  .registration-row > div:first-child,
+  .registration-actions {
+    width: 100%;
+  }
+
+  .registration-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .dashboard-recent-row > div {
+    min-width: 0;
+  }
+
+  .profile-info-row {
+    display: grid !important;
+    grid-template-columns: minmax(110px, 35%) minmax(0, 1fr);
+    gap: 8px;
+    padding: 12px 16px !important;
+  }
+
+  .profile-info-row > div {
+    width: auto !important;
+  }
+
+  .profile-info-row > span {
+    overflow-wrap: anywhere;
+  }
+
+  .auth-card {
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main {
+    padding: 16px !important;
+  }
+
+  .sidebar-brand {
+    padding: 8px !important;
+  }
+
+  .sidebar-link {
+    padding: 9px !important;
+  }
+
+  .sidebar-link span {
+    display: none;
+  }
+
+  .sidebar-user {
+    padding: 4px !important;
+  }
+
+  .sidebar-logout {
+    padding: 8px !important;
+  }
+
+  .files-toolbar-actions > button,
+  .files-toolbar-actions > label {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .folder-entry-row > button {
+    padding: 7px 8px !important;
+  }
+
+  .dashboard-recent-row > p {
+    width: 100%;
+    padding-left: 48px;
+  }
+
+  .auth-card {
+    padding: 20px !important;
+  }
+
+  .profile-info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .qalam-ai-card {
+    padding: 22px !important;
+  }
 }
